@@ -1,56 +1,77 @@
-// Mijn Gezondheid — i18n.js
-// Laadt de teksten uit i18n/nl.json of i18n/en.json en zet ze in de pagina.
-// Elementen met data-i18n="sleutel" krijgen de bijbehorende tekst.
+// Welke taal gebruiken we?
+let currentLanguage = "nl";
 
-const LANG_KEY = 'mijngezondheid:lang';
-
+// Hier komen alle vertalingen in te staan
 let translations = {};
-let currentLang = 'nl';
 
-// Haalt een vertaalde tekst op via een sleutel, bijv. t('form.submit')
+// Vertaling ophalen
 function t(key) {
-  return translations[key] !== undefined ? translations[key] : key;
+  if (translations[key]) {
+    return translations[key];
+  } else {
+    return key; // als er niks gevonden wordt
+  }
 }
 
-// Zet alle data-i18n teksten en placeholders in de pagina volgens de
-// geladen taal.
+// Alle teksten op de pagina aanpassen
 function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
+
+  let elements = document.querySelectorAll("[data-i18n]");
+
+  for (let i = 0; i < elements.length; i++) {
+    let el = elements[i];
+    let key = el.getAttribute("data-i18n");
     el.textContent = t(key);
-  });
+  }
 
-  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    el.setAttribute('placeholder', t(key));
-  });
+  let placeholders = document.querySelectorAll("[data-i18n-placeholder]");
 
-  document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-aria-label');
-    el.setAttribute('aria-label', t(key));
-  });
+  for (let i = 0; i < placeholders.length; i++) {
+    let el = placeholders[i];
+    let key = el.getAttribute("data-i18n-placeholder");
+    el.placeholder = t(key);
+  }
+
+  let ariaLabels = document.querySelectorAll("[data-i18n-aria-label]");
+
+  for (let i = 0; i < ariaLabels.length; i++) {
+    let el = ariaLabels[i];
+    let key = el.getAttribute("data-i18n-aria-label");
+    el.setAttribute("aria-label", t(key));
+  }
 }
 
-// Laadt een taalbestand (nl.json of en.json) en past de teksten toe.
+// Taal laden
 async function loadLanguage(lang) {
-  const response = await fetch(`./i18n/${lang}.json`);
+
+  let response = await fetch("./i18n/" + lang + ".json");
   translations = await response.json();
-  currentLang = lang;
+
+  currentLanguage = lang;
 
   document.documentElement.lang = lang;
-  localStorage.setItem(LANG_KEY, lang);
+
+  localStorage.setItem("language", lang);
 
   applyTranslations();
 }
 
-// Wordt één keer aangeroepen bij het opstarten van de app.
+// Start taal laden
 async function initLanguage() {
-  const savedLang = localStorage.getItem(LANG_KEY) || 'nl';
-  await loadLanguage(savedLang);
+  let saved = localStorage.getItem("language");
+
+  if (saved) {
+    await loadLanguage(saved);
+  } else {
+    await loadLanguage("nl");
+  }
 }
 
-// Wisselt tussen Nederlands en Engels.
+// Taal wisselen knop
 async function toggleLanguage() {
-  const nextLang = currentLang === 'nl' ? 'en' : 'nl';
-  await loadLanguage(nextLang);
+  if (currentLanguage === "nl") {
+    await loadLanguage("en");
+  } else {
+    await loadLanguage("nl");
+  }
 }
