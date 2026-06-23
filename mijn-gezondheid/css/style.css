@@ -1,0 +1,492 @@
+/* ==========================================================================
+   Mijn Gezondheid — kleuren, lettertypes en basisstijl
+   ========================================================================== */
+:root {
+  --color-bg: #F3F6F1;
+  --color-surface: #FFFFFF;
+  --color-ink: #1F2E28;
+  --color-ink-soft: #51625B;
+  --color-primary: #2F6F5E;
+  --color-primary-ink: #F3F6F1;
+  --color-accent: #E8714A;
+  --color-border: rgba(31, 46, 40, 0.12);
+  --color-border-strong: rgba(31, 46, 40, 0.22);
+
+  --color-voeding: #E8714A;
+  --color-beweging: #2F6F5E;
+  --color-slaap: #5B6FA8;
+  --color-overig: #9B8557;
+
+  --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --tabbar-height: 64px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, select {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-slaap);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Pagina-opbouw: header boven, inhoud in het midden, tabbalk onderaan vast
+   ========================================================================== */
+.app-shell {
+  max-width: 640px;
+  margin: 0 auto;
+  padding-bottom: var(--tabbar-height);
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.25rem 0.6rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.brand h1 {
+  font-size: 1.25rem;
+}
+
+.lang-toggle {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+main {
+  padding: 0 1.25rem 2rem;
+}
+
+.view[hidden] { display: none; }
+
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--tabbar-height);
+  display: flex;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  background: none;
+  border: none;
+  color: var(--color-ink-soft);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tab-btn svg { width: 22px; height: 22px; }
+
+.tab-btn[aria-current="true"] {
+  color: var(--color-primary);
+}
+
+.tab-btn .tab-add-circle {
+  background: var(--color-primary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -2px;
+}
+.tab-btn .tab-add-circle svg { width: 16px; height: 16px; stroke: var(--color-primary-ink); }
+
+/* ==========================================================================
+   Kaarten en kleine bouwstenen die overal terugkomen
+   ========================================================================== */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-m);
+  border: 1px solid var(--color-border);
+  padding: 1.1rem;
+}
+
+.section-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin: 0 0 0.3rem;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Dashboard: begroeting, balkjes per categorie, statistieken, snel toevoegen
+   ========================================================================== */
+.dashboard-greeting { margin-bottom: 1rem; }
+.dashboard-greeting h2 { font-size: 1.5rem; }
+.dashboard-greeting p { margin: 0.2rem 0 0; color: var(--color-ink-soft); }
+
+.today-card { margin-bottom: 1rem; }
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.bar-row:last-child { margin-bottom: 0; }
+
+.bar-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 90px;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+}
+
+.bar-track {
+  flex: 1;
+  height: 10px;
+  background: var(--color-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.bar-count {
+  width: 22px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--color-ink-soft);
+}
+
+.empty-hint {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  margin: 0;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.stat-tile {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  padding: 0.8rem;
+}
+.stat-tile .stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.stat-tile .stat-label {
+  font-size: 0.72rem;
+  color: var(--color-ink-soft);
+}
+
+.quickadd-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.quickadd-btn {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ==========================================================================
+   Formulier — nieuw onderdeel toevoegen
+   ========================================================================== */
+.form-card h2 { font-size: 1.25rem; margin-bottom: 1rem; }
+
+.field { margin-bottom: 1.1rem; }
+.field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.field input[type="text"],
+.field input[type="date"],
+.field input[type="number"],
+.field select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.valuetype-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+.valuetype-option { position: relative; }
+.valuetype-option input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+.valuetype-option span {
+  display: block;
+  text-align: center;
+  padding: 0.6rem 0.4rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-s);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+}
+.valuetype-option input:checked + span {
+  border-color: var(--color-primary);
+  background: rgba(47, 111, 94, 0.08);
+  color: var(--color-primary);
+}
+.valuetype-option input:focus-visible + span {
+  outline: 3px solid var(--color-slaap);
+  outline-offset: 2px;
+}
+
+.value-row {
+  display: flex;
+  gap: 0.5rem;
+}
+.value-row input { flex: 1; }
+.value-unit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--color-primary);
+  color: var(--color-primary-ink);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.form-error {
+  color: var(--color-accent);
+  font-size: 0.82rem;
+  margin-top: -0.4rem;
+  margin-bottom: 0.8rem;
+}
+.form-error[hidden] { display: none; }
+
+.toast {
+  position: fixed;
+  bottom: calc(var(--tabbar-height) + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--color-ink);
+  color: var(--color-bg);
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Overzicht — periode-tabs, totalen, lijst met onderdelen
+   ========================================================================== */
+.period-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.25rem;
+}
+.period-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+}
+.period-tab[aria-current="true"] {
+  background: var(--color-primary);
+  color: var(--color-primary-ink);
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.summary-row .stat-tile .stat-value { font-size: 1.1rem; }
+
+.entry-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.entry-card {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  padding: 0.7rem 0.8rem;
+}
+.entry-main { flex: 1; min-width: 0; }
+.entry-desc {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.entry-meta {
+  font-size: 0.76rem;
+  color: var(--color-ink-soft);
+}
+.entry-value {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+.entry-delete {
+  background: none;
+  border: none;
+  color: var(--color-ink-soft);
+  padding: 0.3rem;
+  flex-shrink: 0;
+}
+.entry-delete svg { width: 18px; height: 18px; display: block; }
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--color-ink-soft);
+}
+.empty-state svg { width: 48px; height: 48px; margin-bottom: 0.8rem; opacity: 0.6; }
+.empty-state p { margin: 0.2rem 0; font-size: 0.9rem; }
+
+.footer-hint {
+  text-align: center;
+  font-size: 0.74rem;
+  color: var(--color-ink-soft);
+  padding: 0 1.25rem 1rem;
+}
+
+/* ==========================================================================
+   Responsive: vanaf 700px iets meer ruimte en bredere statistiek-grid (F9)
+   ========================================================================== */
+@media (min-width: 700px) {
+  .app-shell { max-width: 760px; }
+  main { padding: 0 2rem 2rem; }
+  .app-header { padding: 1.5rem 2rem 0.8rem; }
+  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+}

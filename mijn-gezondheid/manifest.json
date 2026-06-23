@@ -1,0 +1,26 @@
+{
+  "name": "Mijn Gezondheid",
+  "short_name": "Gezondheid",
+  "description": "Houd je voeding, beweging en slaap bij — offline en privé, alles op je eigen apparaat.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F3F6F1",
+  "theme_color": "#1F2E28",
+  "orientation": "portrait-primary",
+  "lang": "nl",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
