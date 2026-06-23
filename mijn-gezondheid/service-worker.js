@@ -1,5 +1,5 @@
-// Mijn Gezondheid — service worker
-// Slaat de app-bestanden op in de cache zodat de app ook offline werkt (F8).
+// Service Worker — simpele versie
+// Zorgt dat de app offline werkt
 
 const CACHE_NAME = 'mijn-gezondheid-v1';
 
@@ -16,29 +16,42 @@ const ASSETS = [
   './icons/icon-512.png'
 ];
 
-// Bij installatie: alle app-bestanden in de cache zetten.
+// --------------------------------------------------
+// Install: bestanden opslaan in cache
+// --------------------------------------------------
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
-});
-
-// Bij activatie: oude caches van eerdere versies opruimen.
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      const oldKeys = keys.filter((key) => key !== CACHE_NAME);
-      return Promise.all(oldKeys.map((key) => caches.delete(key)));
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(ASSETS);
     })
   );
 });
 
-// Bij elk verzoek: eerst kijken of het bestand al in de cache staat.
-// Zo niet, dan alsnog ophalen via internet.
+// --------------------------------------------------
+// Activate: oude caches verwijderen
+// --------------------------------------------------
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      keys.forEach(key => {
+        if (key !== CACHE_NAME) {
+          caches.delete(key);
+        }
+      });
+    })
+  );
+});
+
+// --------------------------------------------------
+// Fetch: eerst cache, anders internet
+// --------------------------------------------------
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+    caches.match(event.request).then(response => {
+      if (response) {
+        return response; // gevonden in cache
+      }
+      return fetch(event.request); // anders internet
     })
   );
 });
