@@ -22,6 +22,18 @@
       <button id="lang-toggle" class="lang-toggle" data-i18n-aria-label="lang.toggleLabel" type="button">
         <span data-i18n="lang.code">NL</span>
       </button>
+      <script>
+        window.addEventListener("load", async ()=> {
+          if (!("serviceWorker" in navigator)) {
+            try {
+              await navigator.serviceWorker.register("sw.js");
+              console.log("Service Worker geregistreerd!");
+            } catch (error) {
+              console.error("Service Worker registratie mislukt:", error);
+            }
+          }
+        });
+        </script>
     </header>
 
     <main>
