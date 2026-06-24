@@ -6,6 +6,20 @@ const CATEGORIES = ['voeding', 'beweging', 'slaap', 'overig'];
 
 let entries = [];
 let currentPeriod = 'dag';
+let currentView = 'dashboard';
+
+function setActiveView(viewName) {
+  currentView = viewName;
+
+  document.querySelectorAll('.view').forEach(view => {
+    view.hidden = view.dataset.view !== viewName;
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const isActive = btn.dataset.target === viewName;
+    btn.setAttribute('aria-current', isActive ? 'true' : 'false');
+  });
+}
 
 // --------------------------------------------------
 // Opslag
@@ -205,8 +219,33 @@ document.getElementById('entry-form').addEventListener('submit', (e) => {
 document.querySelectorAll('.period-tab').forEach(btn => {
   btn.addEventListener('click', () => {
     currentPeriod = btn.dataset.period;
+    document.querySelectorAll('.period-tab').forEach(tab => {
+      tab.setAttribute('aria-current', tab === btn ? 'true' : 'false');
+    });
     renderOverview();
   });
+});
+
+// --------------------------------------------------
+// Hoofdnavigeatie en snelle acties
+// --------------------------------------------------
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setActiveView(btn.dataset.target);
+  });
+});
+
+document.querySelectorAll('.quickadd-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const category = btn.dataset.quickadd || 'voeding';
+    document.getElementById('input-category').value = category;
+    setActiveView('add');
+    document.getElementById('input-description').focus();
+  });
+});
+
+document.getElementById('lang-toggle').addEventListener('click', async () => {
+  await toggleLanguage();
 });
 
 // --------------------------------------------------
@@ -216,9 +255,11 @@ function init() {
   entries = loadEntries();
 
   document.getElementById('input-date').value = getToday();
+  setActiveView(currentView);
 
   renderDashboard();
   renderOverview();
+  initLanguage().catch(console.error);
 }
 
 document.addEventListener('DOMContentLoaded', init);
